@@ -64,7 +64,7 @@ Les visuels présentés sont des versions beta et sont susceptibles d’évoluer
 - Configuration initiale (rapide)
 - Premium et partenariats
 - Support & Aide
-- Licence et crédits
+- Crédits
 - Roadmap
 
 ---
@@ -247,12 +247,6 @@ Pour devenir un **partenaire officiel** de PronoBot et ainsi avoir accès à un 
     - "Je ne peux créer des matchs" → vérifier que vous avez bien configurer les rôles admins et manager ainsi que les salons dans le /pbconfig
     - "Vous n'avez pas de compte" → utilisez /pb open.  
     - "Commande désactivée" → un administrateur l’a peut‑être désactivée (/togglecommand list).
-
----
-
-## Licence
-
-Projet sous licence MIT — voir le fichier LICENSE pour plus de détails.
 
 ---
 
