@@ -1,4 +1,4 @@
-<img width="668" height="550" alt="image" src="https://github.com/user-attachments/assets/db4b3e77-86cb-41c1-81ac-720790750b01" /># 🎲 PronoBot — Bot Discord de Bookmaker (Pronostics en tout genre) 100% configurable
+# 🎲 PronoBot — Bot Discord de Bookmaker (Pronostics en tout genre) 100% configurable
 
 **[🇫🇷 Français](#-pronobot--bot-discord-de-bookmaker-pronostics-en-tout-genre-100-configurable) | [🇬🇧 English](#-pronobot--customizable-discord-bookmaker-bot)**
 
