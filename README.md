@@ -1,4 +1,4 @@
-# 🎲 PronoBot — Bot Discord de Bookmaker (Pronostics en tout genre) 100% configurable
+<img width="668" height="550" alt="image" src="https://github.com/user-attachments/assets/db4b3e77-86cb-41c1-81ac-720790750b01" /># 🎲 PronoBot — Bot Discord de Bookmaker (Pronostics en tout genre) 100% configurable
 
 **[🇫🇷 Français](#-pronobot--bot-discord-de-bookmaker-pronostics-en-tout-genre-100-configurable) | [🇬🇧 English](#-pronobot--customizable-discord-bookmaker-bot)**
 
@@ -44,15 +44,16 @@ Les visuels présentés sont des versions beta et sont susceptibles d’évoluer
 
 | Gain | Match Libre |
 | :---: | :---: |
-| ![Gain](https://i.imgur.com/NeeEMtr.png) | ![Match Libre](https://i.imgur.com/lhqItPA.png) |
+| ![Gain](https://i.imgur.com/NeeEMtr.png) | ![Match Libre](https://i.imgur.com/zI6aDQZ.png) |
 
 | Match Sport | Match Terminé |
 | :---: | :---: |
-| ![Match Sport](https://i.imgur.com/dbXH3o0.png) | ![Match Terminé](https://i.imgur.com/ccg81BA.png) |
+| ![Match Sport](https://i.imgur.com/W7Ary4P.png) | ![Match Terminé](https://i.imgur.com/XFypLC6.png) |
 
 | Statistiques |
 | :---: |
-| ![Statistiques](https://i.imgur.com/cgf6isq.png) |
+| ![Statistiques](https://i.imgur.com/dhJKZqT.png) |
+| *Stats d'un utilisateur sur un serveur anglophone!* |
 
 ---
 
@@ -384,15 +385,16 @@ Note: Custom visual generation (custom canvases) is reserved for premium/partner
 
 | Win | Free Match |
 | :---: | :---: |
-| ![Win](https://i.imgur.com/NeeEMtr.png) | ![Free Match](https://i.imgur.com/lhqItPA.png) |
+| ![Win](https://i.imgur.com/NeeEMtr.png) | ![Free Match](https://i.imgur.com/zI6aDQZ.png) |
 
 | Sports Match | Completed Match |
 | :---: | :---: |
-| ![Sports Match](https://i.imgur.com/dbXH3o0.png) | ![Completed Match](https://i.imgur.com/ccg81BA.png) |
+| ![Sports Match](https://i.imgur.com/W7Ary4P.png) | ![Completed Match](https://i.imgur.com/XFypLC6.png) |
 
 | Statistics |
 | :---: |
-| ![Statistics](https://i.imgur.com/cgf6isq.png) |
+| ![Statistics](https://i.imgur.com/dhJKZqT.png) |
+| *User stats on an English-speaking server!* |
 
 ---
 
@@ -425,20 +427,30 @@ Everything is designed to be accessible to the general public — no technical k
 
 ## Main Features
 
-- **⭐ Level and XP System**: Earn experience with every action (daily, won/lost bets) and level up! Each server has its own progression system.
-- **💰 Real-time Balance Display**: Your balance and maximum bet are displayed directly in the betting modal for clarity.
-- **📊 New Balance After Each Bet**: Receive a private message after each win/loss with your updated new balance.
-- **🚫 Restriction System**: Managers can restrict users to prevent them from betting (configurable role).
-- **✨ Improved Interface**: Visual emojis for match statuses (✅ open, 🔒 closed, ⏳ pending).
-- Virtual economy: initial coins, daily rewards, winnings/losses.
-- Simple and fast betting (choice, amount).
-- Match creation and management (sports or free).
-- Automatic resolution and winnings distribution.
-- Leaderboards (level, wins, win rate, losses, profit ratio).
-- Global ranks (Player, VIP, Champion, Partner, Staff, etc.) and certification badges.
-- Role-based permissions (Admin, Manager, Restricted).
-- Slash commands, context menus, and user-friendly interface.
-- Ability to enable/disable commands per server.
+### 🎮 Progression System
+- **⭐ Level and XP**: Earn experience with every action (daily reward, won or lost bets) and level up! Each server has its own independent progression system.
+- **🏆 Dynamic Leaderboards**: 5 ranking categories (level, wins, win rate, losses, profit ratio) for healthy competition among members.
+- **🎖️ Global Ranks**: Ranks visible across all servers (Player, VIP, Champion, Partner, Staff, Owner) with certification badges.
+
+### 💰 Virtual Economy
+- **Virtual Coins**: Configurable starting amount, daily rewards, and complete winnings/losses management.
+- **💳 Real-time Display**: Your current balance and maximum bet are displayed directly in the betting modal for clarity.
+- **📊 Balance Notifications**: Receive a private message after each bet with your updated new balance.
+
+### 🎲 Match Management
+- **Two types of matches**: Sports matches (2 teams + draw) or free matches (up to 9 customizable choices).
+- **Simple and fast betting**: Intuitive interface to choose and bet in just a few clicks.
+- **Automatic resolution**: Instant winnings distribution when closing a match.
+
+### 🛡️ Administration & Moderation
+- **🚫 Restriction System**: Managers can restrict users to prevent them from betting via a configurable role.
+- **🔐 Role-based Permissions**: Fine-grained permission management (Admin, Manager, Restricted) for total control.
+- **⚙️ Toggleable Commands**: Ability to enable or disable specific commands per server.
+
+### ✨ Modern Interface
+- **Slash Commands (/)**: All commands use Discord's modern system.
+- **Context Menu**: Quick access to statistics via right-click on a user.
+- **Visual Emojis**: Clear match statuses (✅ open, 🔒 closed, ⏳ pending).
 
 ---
 
