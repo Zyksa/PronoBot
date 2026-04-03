@@ -109,7 +109,8 @@ Tout est pensé pour être accessible au grand public — pas besoin de connaiss
 ### ✨ Interface Moderne
 - **Commandes slash (/)** : Toutes les commandes utilisent le système moderne de Discord.
 - **Menu contextuel** : Accès rapide aux statistiques via clic droit sur un utilisateur.
-- **Emojis visuels** : Statuts de matchs clairs (✅ ouvert, 🔒 fermé, ⏳ en attente).
+- **Emojis visuels** : Statuts de matchs clairs (🟢 ouvert, 🔴 fermé, 🏁 terminé).
+- **🌍 Descriptions bilingues** : Les descriptions des commandes s'affichent automatiquement en français ou en anglais selon la langue du client Discord.
 
 ---
 
@@ -153,7 +154,7 @@ Les commandes ci‑dessous sont destinées aux utilisateurs lambda.
     Afficher des informations sur l'abonnement premium.
 
 - /bet
-    Placer un pari sur un match disponible (sélection du match → choix → montant).
+    Placer un pari sur un match disponible. Naviguez entre les matchs avec ◀ ▶, consultez la liste complète des matchs actifs avec 📋, puis choisissez votre option et misez.
 
 - /removebet
     Annuler un pari tant que le match n'est pas clos.
@@ -166,19 +167,19 @@ Les commandes ci‑dessous sont destinées aux utilisateurs lambda.
 
 Ces commandes sont réservés aux utilisateurs qui possèdent le rôle assigné comme Manager (configurable)
 
-- /creatematch
+- /match create
     Créer un match sport (_2 equipes, et un match nul_) ou un match libre (_plusieurs choix possible comme un sondage twitch_). Titre, choix, et date/heure pour terminer les paris configurable
 
-- /editmatch
-    Modifier un match existant. **Désormais avec menu de sélection** - plus besoin de chercher l'ID du match !
+- /match edit
+    Modifier un match existant.
 
-- /deletematch
-    Supprimer un match et rembourser les paris. **Désormais avec menu de sélection** - choisissez le match dans une liste interactive.
+- /match delete
+    Supprimer un match et rembourser les paris.
 
-- /closematch
+- /match close
     Clôturer un match et définir le résultat — distribution automatique des gains/pertes.
 
-- /setdeadline <match>
+- /match deadline
     Modifier la date limite pour parier sur un match.
 
 - /listmatches
@@ -200,12 +201,12 @@ Ces commandes sont réservés aux utilisateurs qui possèdent le rôle assigné 
 
 Ces commandes sont réservés aux utilisateurs qui ont la permission administrateur ou qui possèdent le rôle assigné comme Admin (configurable)
 
-- /pbconfig [option] [valeur]
-    Configurer le serveur (rôles, canaux, montants, etc.). Exemple: /pbconfig initialcoins 500
+- /pb config [option] [valeur]
+    Configurer le serveur (rôles, canaux, montants, etc.). Exemple: /pb config initialcoins 500
 
-    Conseil: Configurer en 1er le role administrateur avec /pbconfig adminrole <role admin de votre serveur> ainsi que le role manager avec /pbconfig managerrole <role qui permettra de gérer les matchs)
+    Conseil: Configurer en 1er le role administrateur avec /pb config adminrole <role admin de votre serveur> ainsi que le role manager avec /pb config managerrole <role qui permettra de gérer les matchs>
 
-- /pbviewconfig
+- /pb viewconfig
     Afficher la configuration actuelle du serveur.
 
 - /togglecommand <action> <commande>
@@ -221,9 +222,9 @@ Ces commandes sont réservés aux utilisateurs qui ont la permission administrat
     _par exemple pour faire un système de saisons?_
     **Cette action est irréversible !**
 
-- /pbadmin [add/remove/set/giveall] <utilisateur> <montant>
+- /coins [add/remove/set/giveall] <utilisateur> <montant>
     Gérer les pièces des joueurs.
-    _Exemple : /pbadmin add @user 100_
+    _Exemple : /coins add @user 100_
 
 ---
 
@@ -286,10 +287,10 @@ Affichage clair avec position : exemple "#2 sur 25". Les joueurs qui n'ont pas a
 ## Configuration initiale (rapide)
 
 1. Invitez le bot sur votre serveur.
-2. Définissez les rôles via /pbconfig (adminrole, managerrole, restrictedrole).
-3. Définissez les canaux via /pbconfig : annonces, salon réservés aux paris, salon d'annonces des matchs.
+2. Définissez les rôles via /pb config (adminrole, managerrole, restrictedrole).
+3. Définissez les canaux via /pb config : annonces, salon réservés aux paris, salon d'annonces des matchs.
 4. Définissez les paramètres économiques : initialcoins (montant donné à la création d'un compte pronobot sur votre serveur), dailyamount (montant donné par le /pb daily, 1 fois par jour).
-5. Créez un premier match avec /creatematch et testez les paris en tant qu’utilisateur.
+5. Créez un premier match avec /match create et testez les paris en tant qu'utilisateur.
 
 Conseil : commencez avec de petites valeurs (pièces de départ et récompense quotidienne) pour tester le système avant d’augmenter.
 
@@ -307,7 +308,7 @@ Pour devenir un **partenaire officiel** de PronoBot et ainsi avoir accès à un 
 - Ouvrez un ticket sur le discord si vous rencontrez un bug ou que vous souhaitez faire une suggestion
 - FAQ rapide :
     - "Le bot ne répond pas" → vérifier que le bot est en ligne et a les permissions nécessaires.
-    - "Je ne peux créer des matchs" → vérifier que vous avez bien configurer les rôles admins et manager ainsi que les salons dans le /pbconfig
+    - "Je ne peux créer des matchs" → vérifier que vous avez bien configurer les rôles admins et manager ainsi que les salons dans le /pb config
     - "Vous n'avez pas de compte" → utilisez /pb open.
     - "Commande désactivée" → un administrateur l’a peut‑être désactivée (/togglecommand list).
 
@@ -450,7 +451,8 @@ Everything is designed to be accessible to the general public — no technical k
 ### ✨ Modern Interface
 - **Slash Commands (/)**: All commands use Discord's modern system.
 - **Context Menu**: Quick access to statistics via right-click on a user.
-- **Visual Emojis**: Clear match statuses (✅ open, 🔒 closed, ⏳ pending).
+- **Visual Emojis**: Clear match statuses (🟢 open, 🔴 closed, 🏁 completed).
+- **🌍 Bilingual Descriptions**: Command descriptions automatically display in French or English based on the user's Discord client language.
 
 ---
 
@@ -494,7 +496,7 @@ The commands below are for regular users.
     Display information about premium subscription.
 
 - /bet
-    Place a bet on an available match (select match → choice → amount).
+    Place a bet on an available match. Navigate between matches with ◀ ▶, view a full list of active matches with 📋, then pick your choice and place your bet.
 
 - /removebet
     Cancel a bet as long as the match isn't closed.
@@ -507,19 +509,19 @@ The commands below are for regular users.
 
 These commands are reserved for users with the Manager role (configurable).
 
-- /creatematch
+- /match create
     Create a sports match (_2 teams and a draw_) or a free match (_multiple choices like a Twitch poll_). Title, choices, and bet closing deadline configurable.
 
-- /editmatch
-    Edit an existing match. **Now with selection menu** - no need to search for the match ID!
+- /match edit
+    Edit an existing match.
 
-- /deletematch
-    Delete a match and refund bets. **Now with selection menu** - choose the match from an interactive list.
+- /match delete
+    Delete a match and refund bets.
 
-- /closematch
+- /match close
     Close a match and set the result — automatic winnings/losses distribution.
 
-- /setdeadline <match>
+- /match deadline
     Modify the betting deadline for a match.
 
 - /listmatches
@@ -541,12 +543,12 @@ These commands are reserved for users with the Manager role (configurable).
 
 These commands are reserved for users with administrator permission or the Admin role (configurable).
 
-- /pbconfig [option] [value]
-    Configure the server (roles, channels, amounts, etc.). Example: /pbconfig initialcoins 500
+- /pb config [option] [value]
+    Configure the server (roles, channels, amounts, etc.). Example: /pb config initialcoins 500
 
-    Tip: First configure the admin role with /pbconfig adminrole <your server admin role> and the manager role with /pbconfig managerrole <role that will manage matches>
+    Tip: First configure the admin role with /pb config adminrole <your server admin role> and the manager role with /pb config managerrole <role that will manage matches>
 
-- /pbviewconfig
+- /pb viewconfig
     Display the server's current configuration.
 
 - /togglecommand <action> <command>
@@ -562,9 +564,9 @@ These commands are reserved for users with administrator permission or the Admin
     _e.g., for a season system?_
     **This action is irreversible!**
 
-- /pbadmin [add/remove/set/giveall] <user> <amount>
+- /coins [add/remove/set/giveall] <user> <amount>
     Manage player coins.
-    _Example: /pbadmin add @user 100_
+    _Example: /coins add @user 100_
 
 ---
 
@@ -627,10 +629,10 @@ Clear display with position: example "#2 out of 25". Players without enough data
 ## Initial Setup (Quick)
 
 1. Invite the bot to your server.
-2. Set roles via /pbconfig (adminrole, managerrole, restrictedrole).
-3. Set channels via /pbconfig: announcements, bet-only channel, match announcement channel.
+2. Set roles via /pb config (adminrole, managerrole, restrictedrole).
+3. Set channels via /pb config: announcements, bet-only channel, match announcement channel.
 4. Set economic parameters: initialcoins (amount given when creating a PronoBot account), dailyamount (amount given by /pb daily, once per day).
-5. Create a first match with /creatematch and test betting as a user.
+5. Create a first match with /match create and test betting as a user.
 
 Tip: start with small values (starting coins and daily reward) to test the system before increasing.
 
@@ -648,7 +650,7 @@ To become an **official PronoBot partner** and get direct support from staff plu
 - Open a ticket on Discord if you encounter a bug or want to make a suggestion.
 - Quick FAQ:
     - "Bot doesn't respond" → check that the bot is online and has necessary permissions.
-    - "I can't create matches" → verify you've configured admin and manager roles plus channels in /pbconfig
+    - "I can't create matches" → verify you've configured admin and manager roles plus channels in /pb config
     - "You don't have an account" → use /pb open.
     - "Command disabled" → an administrator may have disabled it (/togglecommand list).
 
