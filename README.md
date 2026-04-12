@@ -88,13 +88,14 @@ Tout est pensé pour être accessible au grand public — pas besoin de connaiss
 
 ### 🎮 Système de Progression
 - **⭐ Niveaux et XP** : Gagnez de l'expérience à chaque action (récompense quotidienne, paris gagnés ou perdus) et montez en niveau ! Chaque serveur possède son propre système de progression indépendant.
-- **🏆 Classements dynamiques** : 5 catégories de classement (niveau, victoires, taux de réussite, défaites, ratio gains/pertes) pour une compétition saine entre membres.
+- **🏆 Classements dynamiques** : 6 catégories de classement (niveau, victoires, taux de réussite, défaites, ratio gains/pertes, solde) pour une compétition saine entre membres.
 - **🎖️ Grades globaux** : Grades visibles sur tous les serveurs (Joueur, VIP, Champion, Partenaire, Staff, Owner) avec badges de certification.
 
 ### 💰 Économie Virtuelle
 - **Pièces virtuelles** : Montant de départ configurable, récompenses quotidiennes et gestion complète des gains/pertes.
 - **💳 Affichage en temps réel** : Votre solde actuel et mise maximale sont affichés directement dans la modal de pari pour plus de clarté.
 - **📊 Notifications de solde** : Recevez un message privé après chaque pari avec votre nouveau solde mis à jour.
+- **💰 Classement par solde** : Classement dédié pour voir qui possède le plus de pièces sur le serveur (`/baltop` ou `/pb top balance`).
 
 ### 🎲 Gestion des Matchs
 - **Deux types de matchs** : Matchs sportifs (2 équipes + match nul) ou matchs libres (jusqu'à 9 choix personnalisables).
@@ -105,6 +106,7 @@ Tout est pensé pour être accessible au grand public — pas besoin de connaiss
 - **🚫 Système de restriction** : Les managers peuvent restreindre des utilisateurs pour les empêcher de parier via un rôle configurable.
 - **🔐 Permissions par rôles** : Gestion fine des permissions (Admin, Manager, Restreint) pour un contrôle total.
 - **⚙️ Commandes activables/désactivables** : Possibilité d'activer ou désactiver des commandes spécifiques par serveur.
+- **🔔 Ping de rôle** : Configurez un rôle à mentionner automatiquement lors de la création d'un nouveau match pour notifier les membres.
 
 ### ✨ Interface Moderne
 - **Commandes slash (/)** : Toutes les commandes utilisent le système moderne de Discord.
@@ -145,7 +147,13 @@ Les commandes ci‑dessous sont destinées aux utilisateurs lambda.
 
 - /pb top [catégorie]
     Voir les classements (par défaut Top 5, sinon Top 10 pour une catégorie donnée).
-    Catégories : level, wins, winrate, losses, profitratio
+    Catégories : level, wins, winrate, losses, profitratio, balance
+
+- /balance <joueur>
+    Consulter le solde en pièces d'un joueur spécifique.
+
+- /baltop
+    Voir le classement des joueurs par solde (Top 10).
 
 - /vote
     Voter pour PronoBot sur Top.gg et soutenir le projet. L'embed explique pourquoi voter est important pour nous aider à grandir.
@@ -202,7 +210,9 @@ Ces commandes sont réservés aux utilisateurs qui possèdent le rôle assigné 
 Ces commandes sont réservés aux utilisateurs qui ont la permission administrateur ou qui possèdent le rôle assigné comme Admin (configurable)
 
 - /pb config [option] [valeur]
-    Configurer le serveur (rôles, canaux, montants, etc.). Exemple: /pb config initialcoins 500
+    Configurer le serveur (rôles, canaux, montants, paramètres de notification, etc.). Exemple: /pb config initialcoins 500
+
+    Options de notification : `pingenabled` (activer/désactiver le ping lors d'un nouveau match) et `pingrole` (rôle à mentionner).
 
     Conseil: Configurer en 1er le role administrateur avec /pb config adminrole <role admin de votre serveur> ainsi que le role manager avec /pb config managerrole <role qui permettra de gérer les matchs>
 
@@ -249,13 +259,14 @@ Les grades servent surtout à reconnaitre les meilleurs joueurs et différencier
 
 ### 🏆 Classements
 
-Cinq catégories principales :
+Six catégories principales :
 
 1. **Niveau** — progression basée sur l'XP gagnée (propre à chaque serveur).
 2. Victoires — nombre total de paris gagnés.
 3. Taux de victoire — pourcentage de paris gagnés (minimum requis : 5 paris).
 4. Défaites — nombre total de paris perdus.
 5. Ratio Gains/Pertes — pièces gagnées / pièces perdues (minimum : au moins 1 perte).
+6. Solde — nombre de pièces actuellement possédées.
 
 ### ⭐ Système d'Expérience et Niveaux
 
@@ -290,7 +301,8 @@ Affichage clair avec position : exemple "#2 sur 25". Les joueurs qui n'ont pas a
 2. Définissez les rôles via /pb config (adminrole, managerrole, restrictedrole).
 3. Définissez les canaux via /pb config : annonces, salon réservés aux paris, salon d'annonces des matchs.
 4. Définissez les paramètres économiques : initialcoins (montant donné à la création d'un compte pronobot sur votre serveur), dailyamount (montant donné par le /pb daily, 1 fois par jour).
-5. Créez un premier match avec /match create et testez les paris en tant qu'utilisateur.
+5. (Optionnel) Activez les pings de match avec `/pb config pingenabled true` et définissez le rôle à mentionner avec `/pb config pingrole <rôle>`.
+6. Créez un premier match avec /match create et testez les paris en tant qu'utilisateur.
 
 Conseil : commencez avec de petites valeurs (pièces de départ et récompense quotidienne) pour tester le système avant d’augmenter.
 
@@ -430,13 +442,14 @@ Everything is designed to be accessible to the general public — no technical k
 
 ### 🎮 Progression System
 - **⭐ Level and XP**: Earn experience with every action (daily reward, won or lost bets) and level up! Each server has its own independent progression system.
-- **🏆 Dynamic Leaderboards**: 5 ranking categories (level, wins, win rate, losses, profit ratio) for healthy competition among members.
+- **🏆 Dynamic Leaderboards**: 6 ranking categories (level, wins, win rate, losses, profit ratio, balance) for healthy competition among members.
 - **🎖️ Global Ranks**: Ranks visible across all servers (Player, VIP, Champion, Partner, Staff, Owner) with certification badges.
 
 ### 💰 Virtual Economy
 - **Virtual Coins**: Configurable starting amount, daily rewards, and complete winnings/losses management.
 - **💳 Real-time Display**: Your current balance and maximum bet are displayed directly in the betting modal for clarity.
 - **📊 Balance Notifications**: Receive a private message after each bet with your updated new balance.
+- **💰 Balance Leaderboard**: Dedicated leaderboard to see who has the most coins on the server (`/baltop` or `/pb top balance`).
 
 ### 🎲 Match Management
 - **Two types of matches**: Sports matches (2 teams + draw) or free matches (up to 9 customizable choices).
@@ -447,6 +460,7 @@ Everything is designed to be accessible to the general public — no technical k
 - **🚫 Restriction System**: Managers can restrict users to prevent them from betting via a configurable role.
 - **🔐 Role-based Permissions**: Fine-grained permission management (Admin, Manager, Restricted) for total control.
 - **⚙️ Toggleable Commands**: Ability to enable or disable specific commands per server.
+- **🔔 Role Ping**: Configure a role to be automatically mentioned when a new match is created to notify members.
 
 ### ✨ Modern Interface
 - **Slash Commands (/)**: All commands use Discord's modern system.
@@ -487,7 +501,13 @@ The commands below are for regular users.
 
 - /pb top [category]
     See leaderboards (default Top 5, or Top 10 for a specific category).
-    Categories: level, wins, winrate, losses, profitratio
+    Categories: level, wins, winrate, losses, profitratio, balance
+
+- /balance <player>
+    Check the coin balance of a specific player.
+
+- /baltop
+    See the top 10 players ranked by balance.
 
 - /vote
     Vote for PronoBot on Top.gg and support the project. The embed explains why voting is important to help us grow.
@@ -544,7 +564,9 @@ These commands are reserved for users with the Manager role (configurable).
 These commands are reserved for users with administrator permission or the Admin role (configurable).
 
 - /pb config [option] [value]
-    Configure the server (roles, channels, amounts, etc.). Example: /pb config initialcoins 500
+    Configure the server (roles, channels, amounts, notification settings, etc.). Example: /pb config initialcoins 500
+
+    Notification options: `pingenabled` (enable/disable ping on new match) and `pingrole` (role to mention).
 
     Tip: First configure the admin role with /pb config adminrole <your server admin role> and the manager role with /pb config managerrole <role that will manage matches>
 
@@ -591,13 +613,14 @@ Ranks mainly serve to recognize top players and distinguish trusted members (sta
 
 ### 🏆 Leaderboards
 
-Five main categories:
+Six main categories:
 
 1. **Level** — progression based on earned XP (unique to each server).
 2. Wins — total number of won bets.
 3. Win Rate — percentage of won bets (minimum 5 bets required).
 4. Losses — total number of lost bets.
 5. Profit Ratio — coins won / coins lost (minimum: at least 1 loss).
+6. Balance — current number of coins owned.
 
 ### ⭐ Experience and Level System
 
@@ -632,7 +655,8 @@ Clear display with position: example "#2 out of 25". Players without enough data
 2. Set roles via /pb config (adminrole, managerrole, restrictedrole).
 3. Set channels via /pb config: announcements, bet-only channel, match announcement channel.
 4. Set economic parameters: initialcoins (amount given when creating a PronoBot account), dailyamount (amount given by /pb daily, once per day).
-5. Create a first match with /match create and test betting as a user.
+5. (Optional) Enable match pings with `/pb config pingenabled true` and set the role with `/pb config pingrole <role>`.
+6. Create a first match with /match create and test betting as a user.
 
 Tip: start with small values (starting coins and daily reward) to test the system before increasing.
 
