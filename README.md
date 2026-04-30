@@ -40,7 +40,7 @@ Les visuels présentés sont des versions beta et sont susceptibles d’évoluer
 
 | Pari | Configuration |
 | :---: | :---: |
-| ![Pari](https://i.imgur.com/91F5sDA.png) | ![Configuration](https://i.imgur.com/fl4Gztl.png) |
+| ![Pari](https://i.imgur.com/91F5sDA.png) | ![Configuration](https://i.imgur.com/cXIf4QX.png) |
 
 | Gain | Match Libre |
 | :---: | :---: |
@@ -394,7 +394,7 @@ Note: Custom visual generation (custom canvases) is reserved for premium/partner
 
 | Bet | Configuration |
 | :---: | :---: |
-| ![Bet](https://i.imgur.com/91F5sDA.png) | ![Configuration](https://i.imgur.com/fl4Gztl.png) |
+| ![Bet](https://i.imgur.com/91F5sDA.png) | ![Configuration](https://i.imgur.com/cXIf4QX.png) |
 
 | Win | Free Match |
 | :---: | :---: |
