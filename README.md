@@ -40,15 +40,15 @@ Les visuels présentés sont des versions beta et sont susceptibles d’évoluer
 
 | Pari | Configuration |
 | :---: | :---: |
-| ![Pari](https://i.imgur.com/mNPSkra.png) | ![Configuration](https://i.imgur.com/fl4Gztl.png) |
+| ![Pari](https://i.imgur.com/91F5sDA.png) | ![Configuration](https://i.imgur.com/fl4Gztl.png) |
 
 | Gain | Match Libre |
 | :---: | :---: |
-| ![Gain](https://i.imgur.com/NeeEMtr.png) | ![Match Libre](https://i.imgur.com/zI6aDQZ.png) |
+| ![Gain](https://i.imgur.com/SAaciFC.png) | ![Match Libre](https://i.imgur.com/zI6aDQZ.png) |
 
 | Match Sport | Match Terminé |
 | :---: | :---: |
-| ![Match Sport](https://i.imgur.com/W7Ary4P.png) | ![Match Terminé](https://i.imgur.com/XFypLC6.png) |
+| ![Match Sport](https://i.imgur.com/W7Ary4P.png)<br>![Match Sport Canva](https://i.imgur.com/wZGsryT.png) | ![Match Terminé](https://i.imgur.com/XFypLC6.png)<br>![Match Terminé Canva](https://i.imgur.com/yH4GQYj.png) |
 
 | Statistiques |
 | :---: |
@@ -394,15 +394,15 @@ Note: Custom visual generation (custom canvases) is reserved for premium/partner
 
 | Bet | Configuration |
 | :---: | :---: |
-| ![Bet](https://i.imgur.com/mNPSkra.png) | ![Configuration](https://i.imgur.com/fl4Gztl.png) |
+| ![Bet](https://i.imgur.com/91F5sDA.png) | ![Configuration](https://i.imgur.com/fl4Gztl.png) |
 
 | Win | Free Match |
 | :---: | :---: |
-| ![Win](https://i.imgur.com/NeeEMtr.png) | ![Free Match](https://i.imgur.com/zI6aDQZ.png) |
+| ![Win](https://i.imgur.com/SAaciFC.png) | ![Free Match](https://i.imgur.com/zI6aDQZ.png) |
 
 | Sports Match | Completed Match |
 | :---: | :---: |
-| ![Sports Match](https://i.imgur.com/W7Ary4P.png) | ![Completed Match](https://i.imgur.com/XFypLC6.png) |
+| ![Sports Match](https://i.imgur.com/W7Ary4P.png)<br>![Sports Match Canvas](https://i.imgur.com/wZGsryT.png) | ![Completed Match](https://i.imgur.com/XFypLC6.png)<br>![Completed Match Canvas](https://i.imgur.com/yH4GQYj.png) |
 
 | Statistics |
 | :---: |
