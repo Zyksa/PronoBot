@@ -6,8 +6,6 @@
 ![Node.js](https://img.shields.io/badge/Node.js-v24+-339933?style=for-the-badge&logo=node.js)
 ![License](https://img.shields.io/badge/License-GPL--3.0-blue?style=for-the-badge)
 
-> Exploitation : le runtime de production repose sur **Node.js 24, PM2 et Supabase**. Consultez [le guide PM2](docs/DEPLOYMENT_PM2.md), [le guide base de données](docs/DATABASE.md) et [l'audit de production](docs/PRODUCTION_AUDIT.md) avant tout déploiement.
-
 PronoBot est un bot Discord pensé pour gérer des paris sportifs sur votre serveur avec une économie virtuelle, des classements, des grades, un système de certification et un système de **niveaux et XP**. Simple à utiliser et complétement configurable, il permet de créer des matchs, placer des paris, suivre les statistiques et organiser des compétitions entre membres.
 
 Il y a 3 types de match disponibles :
@@ -36,7 +34,7 @@ Ensuite, suivez les étapes indiquée dans la partie "**Configuration initiale**
 
 ## Aperçu
 
-Les visuels présentés sont des versions beta et sont susceptibles d’évoluer 😏.
+Les visuels présentés peuvent évoluer au fil des mises à jour 😏.
 À noter : la génération de visuels personnalisés (canvas customisés) est réservé aux serveurs premium/partenaires.
 
 Tous les Canvas utilisent la même direction artistique sombre premium, avec une hiérarchie et des couleurs d'état communes. Pour générer localement une planche de prévisualisation de tous les visuels :
@@ -115,6 +113,17 @@ Tout est pensé pour être accessible au grand public — pas besoin de connaiss
 - **Paris simples et rapides** : Interface intuitive pour choisir et miser en quelques clics.
 - **Résolution automatique** : Distribution instantanée des gains lors de la clôture d'un match.
 
+#### 📈 Comment fonctionne un match Bookmaker ?
+
+1. **Création du marché** : un gestionnaire choisit le type `Bookmaker`, renseigne les deux équipes et définit les cotes de départ pour la victoire de l'équipe 1, le match nul et la victoire de l'équipe 2 (1/N/2).
+2. **Cotes en mouvement** : les cotes sont recalculées après chaque pari accepté. Plus un résultat attire de mises, plus sa cote tend à diminuer; les autres résultats peuvent alors devenir plus intéressants. La réserve de risque évite les variations excessives et protège l'économie du serveur.
+3. **Affichage en direct** : le message Discord du match est un embed sans image personnalisée. Il affiche les dernières cotes disponibles, la cagnotte totale, la réserve, la mise maximale et la deadline, puis s'actualise automatiquement après les paris.
+4. **Validation au dernier instant** : lorsque le joueur confirme sa mise, PronoBot compare la cote affichée avec la cote réellement disponible. Si elle a changé entre-temps, le pari est refusé sans débiter de pièces et le joueur peut recommencer avec la nouvelle cote.
+5. **Cote et gain verrouillés** : dès que le pari est accepté, sa cote et son gain potentiel sont enregistrés définitivement. Par exemple, un pari validé à `4,00` reste à `4,00`, même si la cote descend ensuite à `2,50`.
+6. **Protection contre la création excessive de pièces** : la base de données vérifie en une seule opération que le paiement maximal promis reste couvert par les mises collectées et la réserve du match. Une mise trop risquée est refusée sans débit.
+7. **Pari non annulable** : un pari Bookmaker accepté ne peut pas être retiré par le joueur, même avant la deadline, afin d'empêcher toute manipulation des cotes. `/pb mybets` le range dans **« Non annulables (match à cotes dynamiques) »**. Si un gestionnaire supprime ou annule le match, les mises sont néanmoins remboursées.
+8. **Clôture du résultat** : à la fin du match, le gestionnaire choisit le résultat gagnant et PronoBot distribue les gains à partir de la cote individuelle enregistrée pour chaque pari.
+
 ### 🛡️ Administration & Modération
 - **🚫 Système de restriction** : Les managers peuvent restreindre des utilisateurs pour les empêcher de parier via un rôle configurable.
 - **🔐 Permissions par rôles** : Gestion fine des permissions (Admin, Manager, Restreint) pour un contrôle total.
@@ -149,7 +158,7 @@ Les commandes ci‑dessous sont destinées aux utilisateurs lambda.
     Supprimer définitivement votre compte sur ce serveur (confirmation requise).
 
 - /pb balance
-    Voir votre solde actuel.
+    Voir votre solde actuel. L'option `privee` permet de rendre la réponse éphémère.
 
 - /pb daily
     Récupérer la récompense quotidienne (cooldown et gain configurable).
@@ -158,20 +167,32 @@ Les commandes ci‑dessous sont destinées aux utilisateurs lambda.
     Lancer une pièce pour tenter le pile ou face.
 
 - /pb stats [utilisateur]
-    Voir les statistiques détaillées d'un joueur, dont son solde global d'Orbes.
+    Voir les statistiques détaillées d'un joueur, dont son solde global d'Orbes. Les options `utilisateur` et `privee` sont facultatives.
 
 - /pb mybets
-    Voir vos paris en cours.
+    Voir vos paris en cours, séparés entre paris annulables, Bookmaker non annulables et matchs fermés/deadline dépassée. L'option `privee` est facultative.
 
 - /pb top [catégorie]
     Voir les classements (par défaut Top 5, sinon Top 10 pour une catégorie donnée).
-    Catégories : level, wins, winrate, losses, profitratio, balance
+    Catégories : `level`, `wins`, `winrate`, `losses`, `profitratio`, `balance`. L'option `privee` est facultative.
 
 - /balance <joueur>
-    Consulter le solde en pièces d'un joueur spécifique.
+    Consulter le solde en pièces d'un joueur spécifique, publiquement ou avec l'option `privee`.
 
 - /baltop
-    Voir le classement des joueurs par solde (Top 10).
+    Voir le classement des joueurs par solde (Top 10), publiquement ou avec l'option `privee`.
+
+- /history
+    Consulter et parcourir vos 50 derniers mouvements de pièces : paris, gains, remboursements, récompenses et opérations administratives.
+
+- /help [mode]
+    Ouvrir l'aide interactive. Le mode facultatif `joueurs` affiche les commandes publiques et `staff` inclut les commandes de gestion.
+
+- /ping
+    Vérifier la latence Discord, la base de données, la mémoire et l'état du bot.
+
+- /partenaires
+    Afficher la liste des serveurs partenaires officiels de PronoBot.
 
 - /vote
     Voter pour PronoBot sur Top.gg et soutenir le projet. L'embed explique pourquoi voter est important pour nous aider à grandir.
@@ -187,6 +208,12 @@ Les commandes ci‑dessous sont destinées aux utilisateurs lambda.
 
 - /removebet
     Annuler un pari tant que le match n'est pas clos. Un pari Bookmaker à cotes dynamiques n'est jamais retirable par le joueur.
+
+- /listmatches [status]
+    Lister les matchs en filtrant facultativement par `open`, `closed`, `completed` ou `all`.
+
+- /listallmatches
+    Afficher tous les matchs ouverts, fermés et terminés sans filtre.
 
 - Menu contextuel (clic droit > Apps)
     Voir rapidement les stats ou informations d’un utilisateur.
@@ -205,17 +232,14 @@ Ces commandes sont réservés aux utilisateurs qui possèdent le rôle assigné 
 - /match delete
     Supprimer un match et rembourser les paris.
 
+- /match cancel
+    Annuler un match, rembourser tous les paris et envoyer aux parieurs un message privé contenant la raison de l'annulation.
+
 - /match close
     Clôturer un match et définir le résultat — distribution automatique des gains/pertes.
 
 - /match deadline
     Modifier la date limite pour parier sur un match.
-
-- /listmatches
-    Lister tous les matchs actifs (possibilité de voir les match terminés également).
-
-- /listallmatches
-    Afficher TOUS les matchs (ouverts, fermés, terminés) sans filtre pour une vue d'ensemble rapide.
 
 - /restrict <utilisateur>
     Restreindre un utilisateur en lui appliquant le rôle restreint configuré, l'empêchant de parier.
@@ -226,6 +250,9 @@ Ces commandes sont réservés aux utilisateurs qui possèdent le rôle assigné 
 - /serverinfo, /botinfo
     Informations sur le serveur et sa configuration ainsi que l'état technique du bot.
 
+- /contact <message>
+    Envoyer un message à l'administration de PronoBot avec le contexte du serveur. Cette commande historique destinée aux gestionnaires coexiste avec `/support`, accessible à tous.
+
 ### Commandes administrateur (Rôle "Admin" configurable)
 
 Ces commandes sont réservés aux utilisateurs qui ont la permission administrateur ou qui possèdent le rôle assigné comme Admin (configurable)
@@ -233,7 +260,13 @@ Ces commandes sont réservés aux utilisateurs qui ont la permission administrat
 - /pb config [option] [valeur]
     Configurer le serveur (rôles, canaux, montants, paramètres de notification, etc.). Exemple: /pb config initialcoins 500
 
-    Options de notification : `pingenabled` (activer/désactiver le ping lors d'un nouveau match) et `pingrole` (rôle à mentionner).
+    Rôles : `adminrole`, `managerrole`, `restrictedrole`.
+
+    Économie : `initialcoins`, `dailyamount`, `minbet`, `maxbet`, `dynamicreserve`.
+
+    Canaux : `announcementschannel`, `betschannel`, `matcheschannel`, `logschannel`, `levelupchannel`, `activitemembreschannel`.
+
+    Interface et comportement : `language` (`fr`/`en`), `usepremiumimages`, `logslevel` (`none`/`normal`/`detailed`), `pingenabled`, `pingrole`, `closerecap`, `levelupenabled`, `activitemembres`, `cacherparis`, `commandesdejeux`.
 
     Option Bookmaker : `dynamicreserve` définit le risque net maximal de chaque **nouveau** match dynamique. La réserve et la mise maximale sont figées à sa création. Exemple : `/pb config dynamicreserve 10000`.
 
@@ -247,6 +280,12 @@ Ces commandes sont réservés aux utilisateurs qui ont la permission administrat
 - /pb config (option commandesdejeux)
     Activer ou désactiver les jeux (coinflip, etc.) sur le serveur.
 
+- /togglecommand <disable|enable|list> [commande]
+    Désactiver, réactiver ou lister les commandes désactivées sur le serveur.
+
+- /tutorial
+    Publier dans le salon courant le tutoriel interactif de prise en main de PronoBot.
+
 - /pb userinfo <utilisateur>
     Informations complètes sur un utilisateur (infos Discord + infos PronoBot).
     (disponible aussi dans le menu contextuel)
@@ -257,12 +296,36 @@ Ces commandes sont réservés aux utilisateurs qui ont la permission administrat
     _par exemple pour faire un système de saisons?_
     **Cette action est irréversible !**
 
-- /coins [add/remove/set/giveall] <utilisateur> <montant>
-    Gérer les pièces des joueurs.
-    _Exemple : /coins add @user 100_
+- /coins add|remove|set <utilisateur> <montant>
+    Ajouter, retirer ou définir les pièces d'un joueur. _Exemple : `/coins add @user 100`._
+
+- /coins giveall <montant>
+    Ajouter des pièces à tous les comptes du serveur. Cette sous-commande est également accessible au rôle Manager.
+
+### Commandes du propriétaire du bot
+
+Ces commandes sont déployées uniquement sur le serveur d'administration et vérifient l'identité du propriétaire du bot.
 
 - /giveorbs <all ou ID utilisateur> <montant>
-    Commande réservée au propriétaire et disponible uniquement sur le serveur d'administration. Elle distribue des Orbes globales à un utilisateur ou à tous les comptes existants.
+    Distribuer des Orbes globales à un utilisateur ou à tous les comptes existants.
+
+- /broadcast <message> [title]
+    Diffuser une annonce sur tous les serveurs où PronoBot est présent.
+
+- /certify add|remove|check <userid> et /certify list
+    Gérer et consulter les certifications globales.
+
+- /setrank <userid> <rank> et /listrank
+    Attribuer un grade global (`player`, `vip`, `champion`, `partner`, `staff`, `owner`) et lister les utilisateurs gradés.
+
+- /setpremium activate|deactivate|extend|check
+    Activer, désactiver, prolonger ou consulter le Premium d'un serveur à partir de son ID.
+
+- /globalstats [période], /performance [action], /server getinfo <serverid>
+    Consulter les statistiques globales, les performances et les informations d'un serveur.
+
+- /reload
+    Recharger les commandes du bot après une mise à jour.
 
 ---
 
@@ -415,7 +478,7 @@ Then, follow the steps in the "**Initial Setup**" section.
 
 ## Preview
 
-The visuals shown are beta versions and may evolve 😏.
+The visuals shown may evolve over future updates 😏.
 Note: Custom visual generation (custom canvases) is reserved for premium/partner servers.
 
 Every Canvas follows the same dark premium art direction, shared hierarchy and status colours. Generate a local preview sheet for every visual with `npm run preview:canvas`; PNG files are written to `docs/assets/canvas-previews/` by default.
@@ -488,6 +551,17 @@ Everything is designed to be accessible to the general public — no technical k
 - **Simple and fast betting**: Intuitive interface to choose and bet in just a few clicks.
 - **Automatic resolution**: Instant winnings distribution when closing a match.
 
+#### 📈 How does a Sportsbook match work?
+
+1. **Market creation**: a manager selects `Sportsbook`, enters both teams, and sets the starting odds for team 1, the draw, and team 2 (1/X/2).
+2. **Moving odds**: odds are recalculated after every accepted bet. As an outcome attracts more stakes, its odds tend to decrease while the other outcomes may become more attractive. The risk reserve smooths those movements and protects the server economy.
+3. **Live display**: the Discord announcement is an image-free embed showing the latest odds, total pool, reserve, maximum stake, and deadline. It refreshes automatically after bets.
+4. **Last-second validation**: when a player confirms a stake, PronoBot compares the displayed odds with the currently available quote. If it moved, the bet is rejected without debiting coins and the player can try again using the new odds.
+5. **Locked quote and payout**: once accepted, the bet's odds and potential payout are permanently recorded. For example, a bet accepted at `4.00` remains at `4.00` even if the market later drops to `2.50`.
+6. **Protection against excessive coin creation**: the database atomically verifies that the highest promised payout remains covered by collected stakes and the match reserve. An unsafe stake is rejected without a debit.
+7. **Final bet**: players cannot remove an accepted Sportsbook bet, even before the deadline, preventing odds manipulation. `/pb mybets` lists it under **“Not cancelable (dynamic-odds match)”**. Stakes are still refunded if a manager deletes or cancels the match.
+8. **Settlement**: when the event ends, the manager selects the winning result and PronoBot distributes winnings using the individual odds stored for each bet.
+
 ### 🛡️ Administration & Moderation
 - **🚫 Restriction System**: Managers can restrict users to prevent them from betting via a configurable role.
 - **🔐 Role-based Permissions**: Fine-grained permission management (Admin, Manager, Restricted) for total control.
@@ -522,7 +596,7 @@ The commands below are for regular users.
     Permanently delete your account on this server (confirmation required).
 
 - /pb balance
-    See your current balance.
+    See your current balance. The optional `privee` switch makes the response ephemeral.
 
 - /pb daily
     Claim your daily reward (configurable cooldown and reward).
@@ -531,20 +605,32 @@ The commands below are for regular users.
     Flip a coin to try heads or tails.
 
 - /pb stats [user]
-    See detailed player statistics, including their global Orb balance.
+    See detailed player statistics, including their global Orb balance. The `utilisateur` and `privee` options are optional.
 
 - /pb mybets
-    See your active bets.
+    See active bets grouped into cancelable bets, locked Sportsbook bets, and closed/deadline-expired matches. The `privee` option is optional.
 
 - /pb top [category]
     See leaderboards (default Top 5, or Top 10 for a specific category).
-    Categories: level, wins, winrate, losses, profitratio, balance
+    Categories: `level`, `wins`, `winrate`, `losses`, `profitratio`, `balance`. The `privee` option is optional.
 
 - /balance <player>
-    Check the coin balance of a specific player.
+    Check a player's coin balance publicly or with the optional `privee` switch.
 
 - /baltop
-    See the top 10 players ranked by balance.
+    See the top 10 players ranked by balance, publicly or with the optional `privee` switch.
+
+- /history
+    Browse your latest 50 coin movements, including bets, winnings, refunds, rewards, and administrative operations.
+
+- /help [mode]
+    Open the interactive help. Optional mode `joueurs` shows public commands, while `staff` also includes management commands.
+
+- /ping
+    Check Discord latency, database latency, memory usage, and bot health.
+
+- /partenaires
+    Display PronoBot's official partner servers.
 
 - /vote
     Vote for PronoBot on Top.gg and support the project. The embed explains why voting is important to help us grow.
@@ -560,6 +646,12 @@ The commands below are for regular users.
 
 - /removebet
     Cancel a bet as long as the match isn't closed. Dynamic Sportsbook bets can never be removed by the player.
+
+- /listmatches [status]
+    List matches with an optional `open`, `closed`, `completed`, or `all` status filter.
+
+- /listallmatches
+    Display every open, closed, and completed match without a filter.
 
 - Context menu (right-click > Apps)
     Quickly view stats or information about a user.
@@ -578,17 +670,14 @@ These commands are reserved for users with the Manager role (configurable).
 - /match delete
     Delete a match and refund bets.
 
+- /match cancel
+    Cancel a match, refund every bet, and DM bettors with the cancellation reason.
+
 - /match close
     Close a match and set the result — automatic winnings/losses distribution.
 
 - /match deadline
     Modify the betting deadline for a match.
-
-- /listmatches
-    List all active matches (option to view completed matches too).
-
-- /listallmatches
-    Display ALL matches (open, closed, completed) without filters for a quick overview.
 
 - /restrict <user>
     Restrict a user by applying the configured restricted role, preventing them from betting.
@@ -599,6 +688,9 @@ These commands are reserved for users with the Manager role (configurable).
 - /serverinfo, /botinfo
     Server configuration and bot technical status information.
 
+- /contact <message>
+    Send a message to PronoBot administration with the server context. This legacy manager command coexists with the public `/support` command.
+
 ### Administrator Commands (Configurable "Admin" Role)
 
 These commands are reserved for users with administrator permission or the Admin role (configurable).
@@ -606,7 +698,13 @@ These commands are reserved for users with administrator permission or the Admin
 - /pb config [option] [value]
     Configure the server (roles, channels, amounts, notification settings, etc.). Example: /pb config initialcoins 500
 
-    Notification options: `pingenabled` (enable/disable ping on new match) and `pingrole` (role to mention).
+    Roles: `adminrole`, `managerrole`, `restrictedrole`.
+
+    Economy: `initialcoins`, `dailyamount`, `minbet`, `maxbet`, `dynamicreserve`.
+
+    Channels: `announcementschannel`, `betschannel`, `matcheschannel`, `logschannel`, `levelupchannel`, `activitemembreschannel`.
+
+    Interface and behavior: `language` (`fr`/`en`), `usepremiumimages`, `logslevel` (`none`/`normal`/`detailed`), `pingenabled`, `pingrole`, `closerecap`, `levelupenabled`, `activitemembres`, `cacherparis`, `commandesdejeux`.
 
     Sportsbook option: `dynamicreserve` sets the maximum net risk for each **new** dynamic match. The reserve and maximum bet are snapshotted when the market is created. Example: `/pb config dynamicreserve 10000`.
 
@@ -620,6 +718,12 @@ These commands are reserved for users with administrator permission or the Admin
 - /pb config (option commandesdejeux)
     Enable or disable games (coinflip, etc.) on the server.
 
+- /togglecommand <disable|enable|list> [command]
+    Disable, re-enable, or list disabled commands on the server.
+
+- /tutorial
+    Publish PronoBot's interactive onboarding tutorial in the current channel.
+
 - /pb userinfo <user>
     Complete information about a user (Discord info + PronoBot info).
     (also available in context menu)
@@ -630,12 +734,36 @@ These commands are reserved for users with administrator permission or the Admin
     _e.g., for a season system?_
     **This action is irreversible!**
 
-- /coins [add/remove/set/giveall] <user> <amount>
-    Manage player coins.
-    _Example: /coins add @user 100_
+- /coins add|remove|set <user> <amount>
+    Add, remove, or set a player's coins. _Example: `/coins add @user 100`._
+
+- /coins giveall <amount>
+    Add coins to every account on the server. This subcommand is also available to the Manager role.
+
+### Bot Owner Commands
+
+These commands are only deployed in the administration server and verify the bot owner's identity.
 
 - /giveorbs <all or user ID> <amount>
-    Owner-only command available exclusively in the administration server. It grants global Orbs to one user or every existing account.
+    Grant global Orbs to one user or every existing account.
+
+- /broadcast <message> [title]
+    Broadcast an announcement to every server using PronoBot.
+
+- /certify add|remove|check <userid> and /certify list
+    Manage and inspect global certifications.
+
+- /setrank <userid> <rank> and /listrank
+    Assign a global rank (`player`, `vip`, `champion`, `partner`, `staff`, `owner`) and list ranked users.
+
+- /setpremium activate|deactivate|extend|check
+    Activate, deactivate, extend, or inspect a server's Premium subscription by ID.
+
+- /globalstats [period], /performance [action], /server getinfo <serverid>
+    Inspect global statistics, performance metrics, and a server's information.
+
+- /reload
+    Reload bot commands after an update.
 
 ---
 
