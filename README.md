@@ -3,21 +3,22 @@
 **[🇫🇷 Français](#-pronobot--bot-discord-de-bookmaker-pronostics-en-tout-genre-100-configurable) | [🇬🇧 English](#-pronobot--customizable-discord-bookmaker-bot)**
 
 ![Discord](https://img.shields.io/badge/Discord-Bot-7289da?style=for-the-badge&logo=discord)
-![Node.js](https://img.shields.io/badge/Node.js-v18+-339933?style=for-the-badge&logo=node.js)
-![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
+![Node.js](https://img.shields.io/badge/Node.js-v24+-339933?style=for-the-badge&logo=node.js)
+![License](https://img.shields.io/badge/License-GPL--3.0-blue?style=for-the-badge)
+
+> Exploitation : le runtime de production repose sur **Node.js 24, PM2 et Supabase**. Consultez [le guide PM2](docs/DEPLOYMENT_PM2.md), [le guide base de données](docs/DATABASE.md) et [l'audit de production](docs/PRODUCTION_AUDIT.md) avant tout déploiement.
 
 PronoBot est un bot Discord pensé pour gérer des paris sportifs sur votre serveur avec une économie virtuelle, des classements, des grades, un système de certification et un système de **niveaux et XP**. Simple à utiliser et complétement configurable, il permet de créer des matchs, placer des paris, suivre les statistiques et organiser des compétitions entre membres.
 
-Il y a 2 types de match disponibles:
+Il y a 3 types de match disponibles :
 
 - Le match sport, on rentre le nom de l'équipe A, sa côte, le nom de l'équipe B, sa côte ainsi que la côte du Match Nul.
 - Le match libre, question personnalisée et jusqu'à 9 choix possibles (avec côte pour chaques choix) à la manière des sondages twitch ou encore des paris avec comme réponse "Oui/Non"
+- Le match **Bookmaker**, sans image personnalisée : les cotes 1/N/2 évoluent en direct selon les mises. La cote acceptée est figée pour chaque pari et ce pari ne peut pas être retiré.
 
 ---
 
-Le code du bot n'est **pas open source** mais il est **certifié** par discord _(+ de 100 serveurs l'ont déjà adopté)_.
-
-Si vous êtes propriétaire d'un serveur et que vous souhaitez **visualiser le code du bot** c'est avec plaisir, ouvrez un ticket sur le [discord officiel](https://discord.gg/rbrPpWbEnV) puis si vous décidez de nous faire confiance, pourquoi pas devenir partenaire 😁
+Le code source est distribué sous licence **GPL-3.0** et le bot est **certifié** par Discord _(+ de 100 serveurs l'ont déjà adopté)_. Pour les questions d'exploitation ou de partenariat, rejoignez le [Discord officiel](https://discord.gg/VU3q8MKkDJ).
 
 | Application Vérifiée ☺️ |
 | :---: |
@@ -37,6 +38,14 @@ Ensuite, suivez les étapes indiquée dans la partie "**Configuration initiale**
 
 Les visuels présentés sont des versions beta et sont susceptibles d’évoluer 😏.
 À noter : la génération de visuels personnalisés (canvas customisés) est réservé aux serveurs premium/partenaires.
+
+Tous les Canvas utilisent la même direction artistique sombre premium, avec une hiérarchie et des couleurs d'état communes. Pour générer localement une planche de prévisualisation de tous les visuels :
+
+```bash
+npm run preview:canvas
+```
+
+Les PNG sont créés dans `docs/assets/canvas-previews/`. Un autre dossier peut être fourni en argument avec `npm run preview:canvas -- /chemin/de/sortie`.
 
 | Pari | Configuration |
 | :---: | :---: |
@@ -93,12 +102,16 @@ Tout est pensé pour être accessible au grand public — pas besoin de connaiss
 
 ### 💰 Économie Virtuelle
 - **Pièces virtuelles** : Montant de départ configurable, récompenses quotidiennes et gestion complète des gains/pertes.
+- **Orbes globales** : Le solde d'Orbes `<:orbes:1522970669929861322>` d'un joueur est identique sur tous les serveurs et visible uniquement dans `/pb stats`.
 - **💳 Affichage en temps réel** : Votre solde actuel et mise maximale sont affichés directement dans la modal de pari pour plus de clarté.
 - **📊 Notifications de solde** : Recevez un message privé après chaque pari avec votre nouveau solde mis à jour.
 - **💰 Classement par solde** : Classement dédié pour voir qui possède le plus de pièces sur le serveur (`/baltop` ou `/pb top balance`).
 
 ### 🎲 Gestion des Matchs
-- **Deux types de matchs** : Matchs sportifs (2 équipes + match nul) ou matchs libres (jusqu'à 9 choix personnalisables).
+- **Trois types de matchs** : sportifs, libres, ou Bookmaker à cotes dynamiques.
+- **Marché dynamique solvable** : chaque match Bookmaker possède une réserve de risque. PostgreSQL refuse atomiquement toute mise qui ferait dépasser `paiement maximal ≤ mises collectées + réserve`.
+- **Cote garantie** : la cote visible est contrôlée à la validation. Si elle a changé, aucun débit n'a lieu; une fois acceptée, le paiement potentiel reste figé même si le marché évolue.
+- **Embed live** : l'annonce est actualisée après les paris, sans Canvas ni image premium. Les paris Bookmaker sont définitifs; seuls l'annulation ou la suppression administrative les remboursent.
 - **Paris simples et rapides** : Interface intuitive pour choisir et miser en quelques clics.
 - **Résolution automatique** : Distribution instantanée des gains lors de la clôture d'un match.
 
@@ -113,6 +126,11 @@ Tout est pensé pour être accessible au grand public — pas besoin de connaiss
 - **Menu contextuel** : Accès rapide aux statistiques via clic droit sur un utilisateur.
 - **Emojis visuels** : Statuts de matchs clairs (🟢 ouvert, 🔴 fermé, 🏁 terminé).
 - **🌍 Descriptions bilingues** : Les descriptions des commandes s'affichent automatiquement en français ou en anglais selon la langue du client Discord.
+
+### ⚡ Performances et fiabilité
+- **Réponses plus rapides** : Les statistiques, classements, configurations et listes de matchs sont chargés plus efficacement.
+- **Économie atomique** : Les paris, récompenses et gains restent fiables lorsque plusieurs joueurs agissent simultanément.
+- **Infrastructure optimisée** : La base de données, le sharding et la mémoire ont été retravaillés pour améliorer la fluidité et la stabilité du bot.
 
 ---
 
@@ -140,7 +158,7 @@ Les commandes ci‑dessous sont destinées aux utilisateurs lambda.
     Lancer une pièce pour tenter le pile ou face.
 
 - /pb stats [utilisateur]
-    Voir les statistiques détaillées d'un joueur (classements, gains, etc.).
+    Voir les statistiques détaillées d'un joueur, dont son solde global d'Orbes.
 
 - /pb mybets
     Voir vos paris en cours.
@@ -158,6 +176,9 @@ Les commandes ci‑dessous sont destinées aux utilisateurs lambda.
 - /vote
     Voter pour PronoBot sur Top.gg et soutenir le projet. L'embed explique pourquoi voter est important pour nous aider à grandir.
 
+- /support
+    Contacter le support PronoBot, proposer une amélioration ou rejoindre le serveur officiel. Les demandes sont privées et transmettent automatiquement le contexte du serveur à l'équipe.
+
 - /pbpremium
     Afficher des informations sur l'abonnement premium.
 
@@ -165,7 +186,7 @@ Les commandes ci‑dessous sont destinées aux utilisateurs lambda.
     Placer un pari sur un match disponible. Naviguez entre les matchs avec ◀ ▶, consultez la liste complète des matchs actifs avec 📋, puis choisissez votre option et misez.
 
 - /removebet
-    Annuler un pari tant que le match n'est pas clos.
+    Annuler un pari tant que le match n'est pas clos. Un pari Bookmaker à cotes dynamiques n'est jamais retirable par le joueur.
 
 - Menu contextuel (clic droit > Apps)
     Voir rapidement les stats ou informations d’un utilisateur.
@@ -176,7 +197,7 @@ Les commandes ci‑dessous sont destinées aux utilisateurs lambda.
 Ces commandes sont réservés aux utilisateurs qui possèdent le rôle assigné comme Manager (configurable)
 
 - /match create
-    Créer un match sport (_2 equipes, et un match nul_) ou un match libre (_plusieurs choix possible comme un sondage twitch_). Titre, choix, et date/heure pour terminer les paris configurable
+    Créer un match sport, libre ou Bookmaker à cotes dynamiques. Pour Bookmaker, saisissez les cotes de base 1/N/2; l'annonce live sans image est créée automatiquement.
 
 - /match edit
     Modifier un match existant.
@@ -214,13 +235,17 @@ Ces commandes sont réservés aux utilisateurs qui ont la permission administrat
 
     Options de notification : `pingenabled` (activer/désactiver le ping lors d'un nouveau match) et `pingrole` (rôle à mentionner).
 
+    Option Bookmaker : `dynamicreserve` définit le risque net maximal de chaque **nouveau** match dynamique. La réserve et la mise maximale sont figées à sa création. Exemple : `/pb config dynamicreserve 10000`.
+
+    La réserve est une cagnotte de sécurité virtuelle : elle n'est ni prélevée sur un joueur ni distribuée automatiquement. Une réserve élevée stabilise les cotes; une réserve faible les fait réagir plus vite. La valeur conseillée est d'environ **20 × la mise maximale** (`10 000` pour une mise maximale de `500`).
+
     Conseil: Configurer en 1er le role administrateur avec /pb config adminrole <role admin de votre serveur> ainsi que le role manager avec /pb config managerrole <role qui permettra de gérer les matchs>
 
 - /pb viewconfig
     Afficher la configuration actuelle du serveur.
 
-- /togglecommand <action> <commande>
-    Activer/désactiver une commande sur le serveur (ainsi qu'une liste pour voir celles désactivées).
+- /pb config (option commandesdejeux)
+    Activer ou désactiver les jeux (coinflip, etc.) sur le serveur.
 
 - /pb userinfo <utilisateur>
     Informations complètes sur un utilisateur (infos Discord + infos PronoBot).
@@ -235,6 +260,9 @@ Ces commandes sont réservés aux utilisateurs qui ont la permission administrat
 - /coins [add/remove/set/giveall] <utilisateur> <montant>
     Gérer les pièces des joueurs.
     _Exemple : /coins add @user 100_
+
+- /giveorbs <all ou ID utilisateur> <montant>
+    Commande réservée au propriétaire et disponible uniquement sur le serveur d'administration. Elle distribue des Orbes globales à un utilisateur ou à tous les comptes existants.
 
 ---
 
@@ -300,7 +328,7 @@ Affichage clair avec position : exemple "#2 sur 25". Les joueurs qui n'ont pas a
 1. Invitez le bot sur votre serveur.
 2. Définissez les rôles via /pb config (adminrole, managerrole, restrictedrole).
 3. Définissez les canaux via /pb config : annonces, salon réservés aux paris, salon d'annonces des matchs.
-4. Définissez les paramètres économiques : initialcoins (montant donné à la création d'un compte pronobot sur votre serveur), dailyamount (montant donné par le /pb daily, 1 fois par jour).
+4. Définissez les paramètres économiques : `initialcoins`, `dailyamount`, `minbet`, `maxbet` et, pour les matchs Bookmaker, `dynamicreserve` (10 000 par défaut).
 5. (Optionnel) Activez les pings de match avec `/pb config pingenabled true` et définissez le rôle à mentionner avec `/pb config pingrole <rôle>`.
 6. Créez un premier match avec /match create et testez les paris en tant qu'utilisateur.
 
@@ -310,19 +338,19 @@ Conseil : commencez avec de petites valeurs (pièces de départ et récompense q
 
 ## Premium et Partenariats
 
-La version premium permet de faire passer votre serveur à un niveau supérieur, le bot aura des fonctionnalités uniques telles que la génération d'**images personnalisées** qui remplaceront les embeds classiques de discord !
+La version premium permet de faire passer votre serveur à un niveau supérieur, le bot aura des fonctionnalités uniques telles que la génération d'**images personnalisées** qui remplaceront les embeds classiques de discord ! Les matchs Bookmaker conservent toujours leur embed live sans image afin que les cotes puissent être actualisées immédiatement.
 
-Pour devenir un **partenaire officiel** de PronoBot et ainsi avoir accès à un support direct avec le staff et l'abonnement **Premium gratuitement**, veuillez ouvrir un ticket sur le [discord officiel](https://discord.gg/rbrPpWbEnV) _(https://discord.gg/rbrPpWbEnV)_
+Pour devenir un **partenaire officiel** de PronoBot et ainsi avoir accès à un support direct avec le staff et l'abonnement **Premium gratuitement**, rejoignez le [Discord officiel](https://discord.gg/VU3q8MKkDJ).
 
 ## Support & Aide
 
-- Rejoignez le serveur Discord (https://discord.gg/rbrPpWbEnV) pour demander de l'aide.
-- Ouvrez un ticket sur le discord si vous rencontrez un bug ou que vous souhaitez faire une suggestion
+- Utilisez `/support` pour envoyer une demande d'aide ou une suggestion directement à l'équipe.
+- Rejoignez le serveur Discord officiel : https://discord.gg/VU3q8MKkDJ
 - FAQ rapide :
     - "Le bot ne répond pas" → vérifier que le bot est en ligne et a les permissions nécessaires.
     - "Je ne peux créer des matchs" → vérifier que vous avez bien configurer les rôles admins et manager ainsi que les salons dans le /pb config
     - "Vous n'avez pas de compte" → utilisez /pb open.
-    - "Commande désactivée" → un administrateur l’a peut‑être désactivée (/togglecommand list).
+    - "Commande désactivée" → un administrateur peut avoir désactivé les jeux (/pb config commandesdejeux).
 
 ---
 
@@ -337,7 +365,6 @@ Utilise Node.js et une base de données (supabase) pour stocker les comptes et s
 ## Roadmap (idées futures)
 
 - Ligues et divisions
-- Matchs dynamiques (côte qui fluctuent en fonction du nombres de paris posés dessus)
 - Paris combinés
 - Événements saisonniers
 - Boutique de récompenses
@@ -357,21 +384,20 @@ Merci d'utiliser PronoBot ! Transformez votre serveur en arène de paris convivi
 **[🇫🇷 Français](#-pronobot--bot-discord-de-bookmaker-pronostics-en-tout-genre-100-configurable) | [🇬🇧 English](#-pronobot--customizable-discord-bookmaker-bot)**
 
 ![Discord](https://img.shields.io/badge/Discord-Bot-7289da?style=for-the-badge&logo=discord)
-![Node.js](https://img.shields.io/badge/Node.js-v18+-339933?style=for-the-badge&logo=node.js)
-![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
+![Node.js](https://img.shields.io/badge/Node.js-v24+-339933?style=for-the-badge&logo=node.js)
+![License](https://img.shields.io/badge/License-GPL--3.0-blue?style=for-the-badge)
 
 PronoBot is a Discord bot designed to manage betting on your server with a virtual economy, rankings, ranks, a certification system, and a **Level & XP system**. Easy to use and fully configurable, it allows you to create matches, place bets, track statistics, and organize competitions among members.
 
-There are 2 types of matches available:
+There are 3 match types available:
 
 - Sports match: enter Team A's name, its odds, Team B's name, its odds, and the Draw odds.
 - Free match: custom question and up to 9 possible choices (with odds for each choice) like Twitch polls or "Yes/No" bets.
+- **Sportsbook match**, always rendered without custom images: 1/X/2 odds update live as stakes arrive. Every accepted bet keeps its quoted odds and cannot be removed.
 
 ---
 
-The bot's code is **not open source** but it is **verified** by Discord _(over 100 servers have already adopted it)_.
-
-If you are a server owner and would like to **view the bot's code**, we'd be happy to show you — open a ticket on the [official Discord](https://discord.gg/rbrPpWbEnV), and if you decide to trust us, perhaps become a partner 😁
+The source code is distributed under the **GPL-3.0** license, and the bot is **verified** by Discord _(over 100 servers have already adopted it)_. For operations or partnership questions, join the [official Discord](https://discord.gg/VU3q8MKkDJ).
 
 | Verified Application ☺️ |
 | :---: |
@@ -391,6 +417,8 @@ Then, follow the steps in the "**Initial Setup**" section.
 
 The visuals shown are beta versions and may evolve 😏.
 Note: Custom visual generation (custom canvases) is reserved for premium/partner servers.
+
+Every Canvas follows the same dark premium art direction, shared hierarchy and status colours. Generate a local preview sheet for every visual with `npm run preview:canvas`; PNG files are written to `docs/assets/canvas-previews/` by default.
 
 | Bet | Configuration |
 | :---: | :---: |
@@ -447,12 +475,16 @@ Everything is designed to be accessible to the general public — no technical k
 
 ### 💰 Virtual Economy
 - **Virtual Coins**: Configurable starting amount, daily rewards, and complete winnings/losses management.
+- **Global Orbs**: A player's Orb balance is shared across every server and is only displayed in `/pb stats`.
 - **💳 Real-time Display**: Your current balance and maximum bet are displayed directly in the betting modal for clarity.
 - **📊 Balance Notifications**: Receive a private message after each bet with your updated new balance.
 - **💰 Balance Leaderboard**: Dedicated leaderboard to see who has the most coins on the server (`/baltop` or `/pb top balance`).
 
 ### 🎲 Match Management
-- **Two types of matches**: Sports matches (2 teams + draw) or free matches (up to 9 customizable choices).
+- **Three match types**: sports, free, and Sportsbook with dynamic odds.
+- **Solvent dynamic market**: every Sportsbook match snapshots a risk reserve. PostgreSQL atomically rejects a stake if it would violate `maximum payout ≤ collected stakes + reserve`.
+- **Guaranteed quote**: the displayed quote is checked at submission. If it moved, no coins are debited; after acceptance, the potential payout remains locked even when later odds change.
+- **Live embed**: the announcement refreshes after bets and never uses Canvas or a premium image. Sportsbook bets are final; only an administrative cancellation or deletion refunds them.
 - **Simple and fast betting**: Intuitive interface to choose and bet in just a few clicks.
 - **Automatic resolution**: Instant winnings distribution when closing a match.
 
@@ -467,6 +499,11 @@ Everything is designed to be accessible to the general public — no technical k
 - **Context Menu**: Quick access to statistics via right-click on a user.
 - **Visual Emojis**: Clear match statuses (🟢 open, 🔴 closed, 🏁 completed).
 - **🌍 Bilingual Descriptions**: Command descriptions automatically display in French or English based on the user's Discord client language.
+
+### ⚡ Performance and reliability
+- **Faster responses**: Statistics, leaderboards, configurations, and match lists are loaded more efficiently.
+- **Atomic economy**: Bets, rewards, and payouts remain reliable when several players act simultaneously.
+- **Optimized infrastructure**: Database access, sharding, and memory management were reworked to improve speed and overall stability.
 
 ---
 
@@ -494,7 +531,7 @@ The commands below are for regular users.
     Flip a coin to try heads or tails.
 
 - /pb stats [user]
-    See detailed statistics of a player (rankings, winnings, etc.).
+    See detailed player statistics, including their global Orb balance.
 
 - /pb mybets
     See your active bets.
@@ -512,6 +549,9 @@ The commands below are for regular users.
 - /vote
     Vote for PronoBot on Top.gg and support the project. The embed explains why voting is important to help us grow.
 
+- /support
+    Contact the PronoBot team, suggest an improvement, or join the official Discord server. Requests are private and automatically include the relevant server context.
+
 - /pbpremium
     Display information about premium subscription.
 
@@ -519,7 +559,7 @@ The commands below are for regular users.
     Place a bet on an available match. Navigate between matches with ◀ ▶, view a full list of active matches with 📋, then pick your choice and place your bet.
 
 - /removebet
-    Cancel a bet as long as the match isn't closed.
+    Cancel a bet as long as the match isn't closed. Dynamic Sportsbook bets can never be removed by the player.
 
 - Context menu (right-click > Apps)
     Quickly view stats or information about a user.
@@ -530,7 +570,7 @@ The commands below are for regular users.
 These commands are reserved for users with the Manager role (configurable).
 
 - /match create
-    Create a sports match (_2 teams and a draw_) or a free match (_multiple choices like a Twitch poll_). Title, choices, and bet closing deadline configurable.
+    Create a sports, free, or dynamic Sportsbook match. Sportsbook creation takes base 1/X/2 odds and automatically publishes the live, image-free announcement.
 
 - /match edit
     Edit an existing match.
@@ -568,13 +608,17 @@ These commands are reserved for users with administrator permission or the Admin
 
     Notification options: `pingenabled` (enable/disable ping on new match) and `pingrole` (role to mention).
 
+    Sportsbook option: `dynamicreserve` sets the maximum net risk for each **new** dynamic match. The reserve and maximum bet are snapshotted when the market is created. Example: `/pb config dynamicreserve 10000`.
+
+    The reserve is a virtual safety pool: it is neither taken from a player nor automatically distributed. A higher reserve makes odds more stable, while a lower reserve makes them react faster. A sensible value is around **20 × the maximum bet** (`10,000` for a maximum bet of `500`).
+
     Tip: First configure the admin role with /pb config adminrole <your server admin role> and the manager role with /pb config managerrole <role that will manage matches>
 
 - /pb viewconfig
     Display the server's current configuration.
 
-- /togglecommand <action> <command>
-    Enable/disable a command on the server (includes list to see disabled ones).
+- /pb config (option commandesdejeux)
+    Enable or disable games (coinflip, etc.) on the server.
 
 - /pb userinfo <user>
     Complete information about a user (Discord info + PronoBot info).
@@ -589,6 +633,9 @@ These commands are reserved for users with administrator permission or the Admin
 - /coins [add/remove/set/giveall] <user> <amount>
     Manage player coins.
     _Example: /coins add @user 100_
+
+- /giveorbs <all or user ID> <amount>
+    Owner-only command available exclusively in the administration server. It grants global Orbs to one user or every existing account.
 
 ---
 
@@ -654,7 +701,7 @@ Clear display with position: example "#2 out of 25". Players without enough data
 1. Invite the bot to your server.
 2. Set roles via /pb config (adminrole, managerrole, restrictedrole).
 3. Set channels via /pb config: announcements, bet-only channel, match announcement channel.
-4. Set economic parameters: initialcoins (amount given when creating a PronoBot account), dailyamount (amount given by /pb daily, once per day).
+4. Set economic parameters: `initialcoins`, `dailyamount`, `minbet`, `maxbet`, and `dynamicreserve` for Sportsbook matches (default: 10,000).
 5. (Optional) Enable match pings with `/pb config pingenabled true` and set the role with `/pb config pingrole <role>`.
 6. Create a first match with /match create and test betting as a user.
 
@@ -664,19 +711,19 @@ Tip: start with small values (starting coins and daily reward) to test the syste
 
 ## Premium and Partnerships
 
-The premium version takes your server to the next level — the bot will have unique features like **custom image generation** that replace Discord's classic embeds!
+The premium version takes your server to the next level — the bot will have unique features like **custom image generation** that replace Discord's classic embeds! Sportsbook matches always keep their image-free live embed so odds can refresh immediately.
 
-To become an **official PronoBot partner** and get direct support from staff plus **free Premium subscription**, please open a ticket on the [official Discord](https://discord.gg/rbrPpWbEnV) _(https://discord.gg/rbrPpWbEnV)_
+To become an **official PronoBot partner** and get direct support from staff plus a **free Premium subscription**, join the [official Discord](https://discord.gg/VU3q8MKkDJ).
 
 ## Support & Help
 
-- Join the Discord server (https://discord.gg/rbrPpWbEnV) to ask for help.
-- Open a ticket on Discord if you encounter a bug or want to make a suggestion.
+- Use `/support` to send a help request or suggestion directly to the team.
+- Join the official Discord server: https://discord.gg/VU3q8MKkDJ
 - Quick FAQ:
     - "Bot doesn't respond" → check that the bot is online and has necessary permissions.
     - "I can't create matches" → verify you've configured admin and manager roles plus channels in /pb config
     - "You don't have an account" → use /pb open.
-    - "Command disabled" → an administrator may have disabled it (/togglecommand list).
+    - "Command disabled" → an administrator may have disabled games (/pb config commandesdejeux).
 
 ---
 
@@ -691,7 +738,6 @@ Uses Node.js and a database (Supabase) to store accounts and statistics.
 ## Roadmap (Future Ideas)
 
 - Leagues and divisions
-- Dynamic matches (odds fluctuate based on bet numbers)
 - Combo bets
 - Seasonal events
 - Reward shop
